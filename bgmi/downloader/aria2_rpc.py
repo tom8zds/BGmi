@@ -26,7 +26,9 @@ class Aria2DownloadRPC(BaseDownloadService):
 
     def add_download(self, url: str, save_path: str) -> str:
         args = [[url], {"dir": save_path}]
-        return cast(str, self.server.aria2.addUri(self.token, *args))
+        r =  self.server.aria2.addUri(self.token, *args)
+        print(r)
+        return cast(str,r)
 
     @staticmethod
     def check_dep():
@@ -40,11 +42,18 @@ class Aria2DownloadRPC(BaseDownloadService):
             print_warning("rpc token should starts with `token:`")
 
     def get_status(self, id: str) -> DownloadStatus:
-        args = (id, ["status"])
+        args = (id, ["status","followedBy", "completedLength", "totalLength"])
         r = self.server.aria2.tellStatus(self.token, *args)
-
+        print(r)
+        if("followedBy" in r.keys()):
+            follow = r["followedBy"][0]
+            print(follow)
+            return self.get_status(follow)
+        active_state = DownloadStatus.downloading
+        if(r["completedLength"] == r["totalLength"]):
+            active_state = DownloadStatus.done
         return {
-            "active": DownloadStatus.downloading,
+            "active": active_state,
             "waiting": DownloadStatus.downloading,
             "paused": DownloadStatus.not_downloading,
             "error": DownloadStatus.error,

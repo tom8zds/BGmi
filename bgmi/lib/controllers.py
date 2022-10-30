@@ -8,7 +8,7 @@ import requests.exceptions
 
 from bgmi.config import MAX_PAGE, write_config
 from bgmi.lib.constants import BANGUMI_UPDATE_TIME, SUPPORT_WEBSITE
-from bgmi.lib.download import Episode, download_prepare
+from bgmi.lib.download import Episode, download_prepare, download_stataus
 from bgmi.lib.fetch import website
 from bgmi.lib.models import (
     FOLLOWED_STATUS,
@@ -458,6 +458,9 @@ def update(name: List[str], download: Any = None, not_ignore: bool = False) -> C
         )
 
     return result
+
+def status(id: List[str]) -> None:
+    download_stataus(id);
 
 
 def status_(name: str, status: int = STATUS_DELETED) -> ControllerResult:

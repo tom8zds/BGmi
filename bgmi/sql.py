@@ -27,7 +27,8 @@ CREATE_TABLE_DOWNLOAD = """CREATE TABLE IF NOT EXISTS download (
           title TEXT NOT NULL,
           episode INTEGER DEFAULT 0,
           download TEXT,
-          status INTEGER DEFAULT 0
+          status INTEGER DEFAULT 0,
+          download_id TEXT
         )"""
 
 CREATE_TABLE_FOLLOWED_FILTER = """CREATE TABLE IF NOT EXISTS filter (

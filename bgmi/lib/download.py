@@ -24,6 +24,20 @@ def get_download_driver(delegate: str) -> BaseDownloadService:
         raise
 
 
+def download_stataus(ids: List[str]) -> None:
+    driver = get_download_driver(DOWNLOAD_DELEGATE)
+    if(len(ids) != 0):
+        for id in ids:
+            print(driver.get_status(id))
+        return
+    downloads = Download.get_all_downloads()
+    for download in downloads:
+        r = driver.get_status(download["download_id"])
+        print(r)
+        d:Download = Download.get_by_id(download["id"])
+        d.status = r.value
+        d.save()
+
 def download_prepare(data: List[Episode]) -> None:
     queue = save_to_bangumi_download_queue(data)
     driver = get_download_driver(DOWNLOAD_DELEGATE)
@@ -39,7 +53,8 @@ def download_prepare(data: List[Episode]) -> None:
         download.status = STATUS_DOWNLOADING
         download.save()
         try:
-            driver.add_download(url=download.download, save_path=save_path)
+            download.download_id = driver.add_download(url=download.download, save_path=save_path)
+            download.save()
             print_info("Add torrent into the download queue, " f"the file will be saved at {save_path}")
         except Exception as e:
             if os.getenv("DEBUG"):  # pragma: no cover

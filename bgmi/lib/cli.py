@@ -29,6 +29,7 @@ from bgmi.lib.constants import (
     ACTION_SEARCH,
     ACTION_SOURCE,
     ACTION_UPDATE,
+    ACTION_UPDATE_STATUS,
     ACTIONS,
     BANGUMI_UPDATE_TIME,
     SPACIAL_APPEND_CHARS,
@@ -36,7 +37,7 @@ from bgmi.lib.constants import (
     SUPPORT_WEBSITE,
     actions_and_arguments,
 )
-from bgmi.lib.controllers import add, cal, config, delete, filter_, list_, mark, search, source, update
+from bgmi.lib.controllers import add, cal, config, delete, filter_, list_, mark, search, source, update, status
 from bgmi.lib.download import download_prepare
 from bgmi.lib.fetch import website
 from bgmi.lib.models import STATUS_DELETED, STATUS_FOLLOWED, STATUS_UPDATED, Bangumi, Filter, Followed, Subtitle
@@ -230,6 +231,9 @@ def filter_wrapper(ret: Any) -> None:
 def update_wrapper(ret: Any) -> None:
     update(name=ret.name, download=ret.download, not_ignore=ret.not_ignore)
 
+def status_wrapper(ret: Any) -> None:
+    print(ret)
+    status(id=ret.id)
 
 def download_manager(ret: Any) -> None:
     print_info("not support yet")
@@ -390,6 +394,7 @@ CONTROLLERS_DICT = {
     ACTION_FILTER: filter_wrapper,
     ACTION_CAL: cal_wrapper,
     ACTION_UPDATE: update_wrapper,
+    ACTION_UPDATE_STATUS: status_wrapper,
     ACTION_FETCH: fetch_,
     ACTION_LIST: list_wrapper,
     ACTION_COMPLETE: complete,

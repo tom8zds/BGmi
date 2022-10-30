@@ -16,7 +16,8 @@ ACTION_MARK = "mark"
 ACTION_SEARCH = "search"
 ACTION_SOURCE = "source"
 ACTION_CONFIG_GEN = "gen"
-ACTION_COMPLETE = "complete"  # bash completion
+ACTION_COMPLETE = "complete"
+ACTION_UPDATE_STATUS = "status"  # bash completion
 ACTIONS = (
     ACTION_ADD,
     ACTION_DELETE,
@@ -31,6 +32,7 @@ ACTIONS = (
     ACTION_SEARCH,
     ACTION_SOURCE,
     ACTION_COMPLETE,
+    ACTION_UPDATE_STATUS,
 )
 ACTION_FOLLOWED = "followed"  # place holder?
 ACTION_HISTORY = "history"
@@ -207,6 +209,21 @@ actions_and_arguments = [
                 "kwargs": dict(
                     action="store_true",
                     help="Do not ignore the old bangumi detail rows (3 month ago).",
+                ),
+            },
+        ],
+    },
+    {
+        "action": ACTION_UPDATE_STATUS,
+        "help": "Update bangumi status from download delege.",
+        "arguments": [
+            {
+                "dest": "id",
+                "kwargs": dict(
+                    metavar="id",
+                    type=str,
+                    nargs="*",
+                    help="aria2 mission gid",
                 ),
             },
         ],
